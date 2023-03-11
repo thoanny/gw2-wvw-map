@@ -25,16 +25,20 @@ export default {
     map.setMaxBounds(new L.LatLngBounds(map.unproject([1466, 2173], map.getMaxZoom()), map.unproject([6724, 6015], map.getMaxZoom())));
 
     const icons = {
-      'keep': L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
-      'tower': L.icon({ iconUrl: '/icons/tower.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
-      'camp': L.icon({ iconUrl: '/icons/camp.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
-      'castle': L.icon({ iconUrl: '/icons/castle.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
-      'gate': L.icon({ iconUrl: '/icons/gate.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
-      'supply': L.icon({ iconUrl: '/icons/supply.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      'keep': L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
+      'tower': L.icon({ iconUrl: '/icons/tower.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
+      'camp': L.icon({ iconUrl: '/icons/camp.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
+      'castle': L.icon({ iconUrl: '/icons/castle.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
+      'gate': L.icon({ iconUrl: '/icons/gate.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
+      'supply': L.icon({ iconUrl: '/icons/supply.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
     };
 
     markers.forEach(m => {
-      L.marker(map.unproject([m.lat, m.lng], map.getMaxZoom()), { icon: icons[m.icon] }).addTo(map);
+      const marker = L.marker(map.unproject([m.lat, m.lng], map.getMaxZoom()), { icon: icons[m.icon] }).addTo(map);
+
+      if (typeof m.title !== 'undefined') {
+        marker.bindPopup(`<strong>${m.title}</strong>`)
+      }
     });
 
     polygons.forEach(p => {

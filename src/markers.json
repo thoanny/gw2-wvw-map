@@ -1,1 +1,164 @@
-[]
+[
+    {
+        "lat": 4586,
+        "lng": 5640,
+        "icon": "tower",
+        "title": "Ravin de Langor"
+    },
+    {
+        "lat": 4376,
+        "lng": 5671,
+        "icon": "camp",
+        "title": "Passage Danelon"
+    },
+    {
+        "lat": 4285,
+        "lng": 5505,
+        "icon": "tower",
+        "title": "Lac Quentin"
+    },
+    {
+        "lat": 3950,
+        "lng": 5597,
+        "icon": "camp",
+        "title": "Clairière de Golanta"
+    },
+    {
+        "lat": 3763,
+        "lng": 5597,
+        "icon": "tower",
+        "title": "Bourbier de Jerrifer"
+    },
+    {
+        "lat": 3663,
+        "lng": 5460,
+        "icon": "keep",
+        "title": "Crête de Verseblanc - Basses terres"
+    },
+    {
+        "lat": 3568,
+        "lng": 5290,
+        "icon": "tower",
+        "title": "Corniche d'Aldon"
+    },
+    {
+        "lat": 3945,
+        "lng": 5435,
+        "icon": "tower",
+        "title": "Petit ravin de Klovan"
+    },
+    {
+        "lat": 4162,
+        "lng": 5185,
+        "icon": "castle",
+        "title": "Château Brumepierre"
+    },
+    {
+        "lat": 3813,
+        "lng": 5207,
+        "icon": "tower",
+        "title": "Piste du ruisseau sauvage"
+    },
+    {
+        "lat": 3649,
+        "lng": 5120,
+        "icon": "camp",
+        "title": "Carrière du voleur"
+    },
+    {
+        "lat": 3781,
+        "lng": 4668,
+        "icon": "camp",
+        "title": "Forêt rasée de Speldan"
+    },
+    {
+        "lat": 3988,
+        "lng": 4651,
+        "icon": "tower",
+        "title": "Faille de Mendon"
+    },
+    {
+        "lat": 3955,
+        "lng": 4937,
+        "icon": "tower",
+        "title": "Col d'Anzalias"
+    },
+    {
+        "lat": 4608,
+        "lng": 5454,
+        "icon": "keep",
+        "title": "Gandara - Vallée"
+    },
+    {
+        "lat": 4743,
+        "lng": 5290,
+        "icon": "tower",
+        "title": "Falaise de Bravost"
+    },
+    {
+        "lat": 4437,
+        "lng": 5158,
+        "icon": "tower",
+        "title": "Ravin de Durios"
+    },
+    {
+        "lat": 4641,
+        "lng": 5129,
+        "icon": "camp",
+        "title": "Bois d'Ombreclair"
+    },
+    {
+        "lat": 4342,
+        "lng": 4922,
+        "icon": "tower",
+        "title": "Percée de Gardogre"
+    },
+    {
+        "lat": 4503,
+        "lng": 4766,
+        "icon": "camp",
+        "title": "Montée de Pangloss"
+    },
+    {
+        "lat": 4243,
+        "lng": 4722,
+        "icon": "keep",
+        "title": "Outre-monde - Belvédère"
+    },
+    {
+        "lat": 4406,
+        "lng": 4637,
+        "icon": "tower",
+        "title": "Flanc de Veloka"
+    },
+    {
+        "lat": 5899,
+        "lng": 4920,
+        "icon": "camp",
+        "title": "Fief du Champion"
+    },
+    {
+        "lat": 5489,
+        "lng": 4624,
+        "icon": "camp",
+        "title": "Refuge de Valrouge"
+    },
+    {
+        "lat": 5706,
+        "lng": 4563,
+        "icon": "tower",
+        "title": "Bruyerouge"
+    },
+    {
+        "lat": 6151,
+        "lng": 4598,
+        "icon": "tower",
+        "title": "Lac vert"
+    },
+    {
+        "lat": 6370,
+        "lng": 4646,
+        "icon": "camp",
+        "title": "Basses terres d'Eau - Verdoyante"
+    }
+]
