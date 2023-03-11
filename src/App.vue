@@ -1,19 +1,18 @@
 <script>
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import markers from "./markers.json";
+import polygons from "./polygons.json";
 
 export default {
-  data() {
-    return {
-      map: null
-    };
-  },
   mounted() {
-    this.map = L.map("map", {
+    const map = L.map("map", {
       crs: L.CRS.Simple,
       minZoom: 2,
       maxZoom: 5,
-    }).setView([-128, 128], 3);
+    });
+
+    map.setView(map.unproject([4095, 4095], map.getMaxZoom()), 3)
 
     L.tileLayer("https://v2.lebusmagique.fr/img/map/wvw-tiles/{z}/{x}/{y}.jpg", {
       minZoom: 0,
@@ -21,48 +20,32 @@ export default {
       continuousWorld: true,
       maxBoundsViscosity: 0.8,
       noWrap: true
-    }).addTo(this.map);
+    }).addTo(map);
 
-    this.map.setMaxBounds(new L.LatLngBounds([-67.9375, 45.78125], [-188, 210.15625]));
+    map.setMaxBounds(new L.LatLngBounds(map.unproject([1466, 2173], map.getMaxZoom()), map.unproject([6724, 6015], map.getMaxZoom())));
 
-    const keepIcon = L.icon({
-      iconUrl: '/icons/keep.png',
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
+    const icons = {
+      'keep': L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      'tower': L.icon({ iconUrl: '/icons/tower.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      'camp': L.icon({ iconUrl: '/icons/camp.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      'castle': L.icon({ iconUrl: '/icons/castle.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      'gate': L.icon({ iconUrl: '/icons/gate.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      'supply': L.icon({ iconUrl: '/icons/supply.png', iconSize: [32, 32], iconAnchor: [16, 16] }),
+    };
+
+    markers.forEach(m => {
+      L.marker(map.unproject([m.lat, m.lng], map.getMaxZoom()), { icon: icons[m.icon] }).addTo(map);
     });
 
-    const towerIcon = L.icon({
-      iconUrl: '/icons/tower.png',
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-    });
-
-    L.marker([-92.3125, 132.71875], { icon: keepIcon }).addTo(this.map);
-    L.marker([-82.75, 118], { icon: towerIcon }).addTo(this.map);
-
-    var latlngs = [
-      [-84.96875, 115.15625],
-      [-82.75, 115.3125],
-      [-80.875, 117.125],
-      [-79.09375, 118.71875],
-      [-80.1875, 121.21875],
-      [-81.375, 120.75],
-      [-82.78125, 121.875],
-      [-84.34375, 121.40625],
-      [-85.1875, 120.375],
-      [-86.46875, 120.625],
-      [-86.40625, 115.84375]
-    ];
-    var polygon = L.polygon(latlngs, { color: 'red' }).addTo(this.map);
-
-    this.map.on('click', this.onMapClick);
-
-  },
-  methods: {
-    onMapClick: (e => {
-      console.log(e);
-      console.log("Point @ [" + e.latlng.lat + ", " + e.latlng.lng + "]");
+    polygons.forEach(p => {
+      L.polygon(p.coords, { color: p.color }).addTo(map);
     })
+
+    map.on('click', function (e) {
+      console.log("Position @ " + map.project([e.latlng.lat, e.latlng.lng], map.getMaxZoom()));
+      console.log("Coords @ [" + e.latlng.lat + ", " + e.latlng.lng + "]");
+    });
+
   }
 };
 </script>
