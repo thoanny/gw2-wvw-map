@@ -59,7 +59,6 @@ onMounted(() => {
 
 function submitMarker() {
   alert('TODO!')
-  // console.log('newMarker:', newMarkerTitle.value, newMarkerLat.value, newMarkerLng.value);
 }
 
 function onMapClick(e) {
@@ -89,8 +88,8 @@ function onMapClick(e) {
     newMarker.value.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
   }
 
-  // newMarkerLat.value = coords.x;
-  // newMarkerLng.value = coords.y;
+  newMarkerLat.value = coords.x;
+  newMarkerLng.value = coords.y;
 }
 
 function updateNewMarkerIcon() {
@@ -130,80 +129,6 @@ function resetNewMarker() {
   }
 }
 
-// export default {
-//   data: () => {
-//     return {
-//       map: null,
-//       newMarkerTitle: null,
-//       newMarkerDescription: null,
-//       newMarkerLat: null,
-//       newMarkerLng: null,
-//     }
-//   },
-//   mounted() {
-//     const map = L.map("map", {
-//       crs: L.CRS.Simple,
-//       minZoom: 2,
-//       maxZoom: 5,
-//     });
-
-//     map.setView(map.unproject([4095, 4095], map.getMaxZoom()), 3)
-
-//     L.tileLayer("https://v2.lebusmagique.fr/img/map/wvw-tiles/{z}/{x}/{y}.jpg", {
-//       minZoom: 0,
-//       maxZoom: 5,
-//       continuousWorld: true,
-//       maxBoundsViscosity: 0.8,
-//       noWrap: true
-//     }).addTo(map);
-
-//     map.setMaxBounds(new L.LatLngBounds(map.unproject([1466, 2173], map.getMaxZoom()), map.unproject([6724, 6015], map.getMaxZoom())));
-
-//     const icons = {
-//       'keep': L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
-//       'tower': L.icon({ iconUrl: '/icons/tower.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
-//       'camp': L.icon({ iconUrl: '/icons/camp.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
-//       'castle': L.icon({ iconUrl: '/icons/castle.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
-//       'gate': L.icon({ iconUrl: '/icons/gate.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
-//       'supply': L.icon({ iconUrl: '/icons/supply.png', iconSize: [32, 32], iconAnchor: [16, 10] }),
-//     };
-
-//     markers.forEach(m => {
-//       const marker = L.marker(map.unproject([m.lat, m.lng], map.getMaxZoom()), { icon: icons[m.icon] }).addTo(map);
-
-//       if (typeof m.title !== 'undefined') {
-//         marker.bindPopup(`<strong>${m.title}</strong>`)
-//       }
-//     });
-
-//     polygons.forEach(p => {
-//       L.polygon(p.coords, { color: p.color }).addTo(map);
-//     });
-
-//     map.on('click', this.onMapClick);
-
-//     this.map = map;
-
-//   },
-//   methods: {
-//     addMarker() {
-//       const icon = L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 10] });
-//       L.marker(this.map.unproject([3528, 4344], this.map.getMaxZoom()), { icon: icon }).addTo(this.map)
-//       console.log('addMarker')
-//     },
-//     submitMarker() {
-//       console.log('newMarker:', this.newMarkerTitle, this.newMarkerDescription, this.newMarkerLat, this.newMarkerLng)
-//     },
-//     onMapClick(e) {
-//       const coords = this.map.project([e.latlng.lat, e.latlng.lng], this.map.getMaxZoom());
-//       console.log("Point @ [" + coords.x + ", " + coords.y + "]");
-//       console.log("Coords @ [" + e.latlng.lat + ", " + e.latlng.lng + "]");
-
-//       this.newMarkerLat = coords.x;
-//       this.newMarkerLng = coords.y;
-//     }
-//   }
-// };
 </script>
 
 <template>
