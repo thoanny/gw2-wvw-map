@@ -26,6 +26,10 @@ const icons = {
 };
 
 onMounted(() => {
+  initMap();
+});
+
+function initMap() {
   const initMap = L.map("map", {
     crs: L.CRS.Simple,
     minZoom: 2,
@@ -57,8 +61,7 @@ onMounted(() => {
   initMap.on('click', onMapClick);
 
   map.value = initMap;
-
-});
+}
 
 function submitMarker() {
   alert('TODO!')
