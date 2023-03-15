@@ -6,12 +6,14 @@ import markers from "./markers.json";
 import polygons from "./polygons.json";
 
 const map = ref(null);
-const newMarkerLat = ref(null);
-const newMarkerLng = ref(null);
-const newMarkerTitle = ref(null);
-const newMarkerDescription = ref(null);
-const newMarkerIcon = ref('keep')
-const newMarker = ref(null);
+const newMarker = ref({
+  marker: null,
+  icon: 'keep',
+  title: null,
+  description: null,
+  lat: null,
+  lng: null,
+});
 const markerEditing = ref(false);
 
 const icons = {
@@ -67,69 +69,69 @@ function onMapClick(e) {
   console.log("Point @ [" + coords.x + ", " + coords.y + "]");
   console.log("Coords @ [" + e.latlng.lat + ", " + e.latlng.lng + "]");
 
-  console.log('clickMap:', newMarker.value, newMarkerTitle.value, newMarkerDescription.value, newMarkerLat.value, newMarkerLng.value)
-
   if (markerEditing.value) {
-    if (newMarker.value) {
-      map.value.removeLayer(newMarker.value)
+    if (newMarker.value.marker) {
+      map.value.removeLayer(newMarker.value.marker)
     }
 
-    newMarker.value = L.marker(map.value.unproject([coords.x, coords.y], map.value.getMaxZoom()), { icon: icons[newMarkerIcon.value] }).addTo(map.value);
+    newMarker.value.marker = L.marker(map.value.unproject([coords.x, coords.y], map.value.getMaxZoom()), { icon: icons[newMarker.value.icon] }).addTo(map.value);
 
     let title = null, description = null;
 
-    if (newMarkerTitle.value) {
-      title = `<h4>${newMarkerTitle.value}</h4>`;
+    if (newMarker.value.title) {
+      title = `<h4>${newMarker.value.title}</h4>`;
     }
 
-    if (newMarkerDescription.value) {
-      description = `<p>${newMarkerDescription.value}</p>`;
+    if (newMarker.value.description) {
+      description = `<p>${newMarker.value.description}</p>`;
     }
 
     if (title || description) {
-      newMarker.value.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
+      newMarker.value.marker.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
     }
 
-    newMarkerLat.value = coords.x;
-    newMarkerLng.value = coords.y;
+    newMarker.value.lat = coords.x;
+    newMarker.value.lng = coords.y;
   }
 
 }
 
 function updateNewMarkerIcon() {
-  if (newMarker.value) {
-    newMarker.value.setIcon(icons[newMarkerIcon.value])
+  if (newMarker.value.marker) {
+    newMarker.value.marker.setIcon(icons[newMarkerIcon.value])
   }
 }
 
 function updateNewMarkerPopup() {
-  if (newMarker.value) {
+  if (newMarker.value.marker) {
     let title = null, description = null;
 
-    if (newMarkerTitle.value) {
-      title = `<h4>${newMarkerTitle.value}</h4>`;
+    if (newMarker.value.title) {
+      title = `<h4>${newMarker.value.title}</h4>`;
     }
 
-    if (newMarkerDescription.value) {
-      description = `<p>${newMarkerDescription.value}</p>`;
+    if (newMarker.value.description) {
+      description = `<p>${newMarker.value.description}</p>`;
     }
 
     if (title || description) {
-      newMarker.value.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
+      newMarker.value.marker.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
     }
   }
 }
 
 function resetNewMarker() {
-  if (newMarker.value) {
-    map.value.removeLayer(newMarker.value);
+  if (newMarker.value.marker) {
+    map.value.removeLayer(newMarker.value.marker);
 
-    newMarker.value = null;
-    newMarkerTitle.value = null;
-    newMarkerDescription.value = null;
-    newMarkerIcon.value = 'keep';
-    newMarkerLat.value = null;
-    newMarkerLng.value = null;
+    newMarker.value = {
+      marker: null,
+      icon: 'keep',
+      title: null,
+      description: null,
+      lat: null,
+      lng: null,
+    }
   }
 
   markerEditing.value = !markerEditing.value
@@ -149,10 +151,10 @@ function resetNewMarker() {
   </button>
   <form @submit.prevent="submitMarker" class="absolute bottom-4 left-4 bg-white rounded-xl p-3 w-64" v-if="markerEditing">
     <div>
-      <input type="text" v-model="newMarkerTitle" placeholder="Titre" @input="updateNewMarkerPopup">
+      <input type="text" v-model="newMarker.title" placeholder="Titre" @input="updateNewMarkerPopup">
     </div>
     <div>
-      <textarea v-model="newMarkerDescription" rows="5" placeholder="Description"
+      <textarea v-model="newMarker.description" rows="5" placeholder="Description"
         @input="updateNewMarkerPopup"></textarea>
     </div>
     <div>
@@ -163,7 +165,7 @@ function resetNewMarker() {
             clip-rule="evenodd" />
         </svg>
       </label>
-      <select id="icon" v-model="newMarkerIcon" @change="updateNewMarkerIcon">
+      <select id="icon" v-model="newMarker.icon" @change="updateNewMarkerIcon">
         <option value="keep">Fort</option>
         <option value="tower">Tour</option>
         <option value="camp">Camp</option>
