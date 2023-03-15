@@ -12,6 +12,7 @@ const newMarkerTitle = ref(null);
 const newMarkerDescription = ref(null);
 const newMarkerIcon = ref('keep')
 const newMarker = ref(null);
+const markerEditing = ref(false);
 
 const icons = {
   'keep': L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -8] }),
@@ -68,28 +69,31 @@ function onMapClick(e) {
 
   console.log('clickMap:', newMarker.value, newMarkerTitle.value, newMarkerDescription.value, newMarkerLat.value, newMarkerLng.value)
 
-  if (newMarker.value) {
-    map.value.removeLayer(newMarker.value)
+  if (markerEditing.value) {
+    if (newMarker.value) {
+      map.value.removeLayer(newMarker.value)
+    }
+
+    newMarker.value = L.marker(map.value.unproject([coords.x, coords.y], map.value.getMaxZoom()), { icon: icons[newMarkerIcon.value] }).addTo(map.value);
+
+    let title = null, description = null;
+
+    if (newMarkerTitle.value) {
+      title = `<h4>${newMarkerTitle.value}</h4>`;
+    }
+
+    if (newMarkerDescription.value) {
+      description = `<p>${newMarkerDescription.value}</p>`;
+    }
+
+    if (title || description) {
+      newMarker.value.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
+    }
+
+    newMarkerLat.value = coords.x;
+    newMarkerLng.value = coords.y;
   }
 
-  newMarker.value = L.marker(map.value.unproject([coords.x, coords.y], map.value.getMaxZoom()), { icon: icons[newMarkerIcon.value] }).addTo(map.value);
-
-  let title = null, description = null;
-
-  if (newMarkerTitle.value) {
-    title = `<h4>${newMarkerTitle.value}</h4>`;
-  }
-
-  if (newMarkerDescription.value) {
-    description = `<p>${newMarkerDescription.value}</p>`;
-  }
-
-  if (title || description) {
-    newMarker.value.bindPopup(((title) ? title : '') + ((description) ? description : '')).openPopup();
-  }
-
-  newMarkerLat.value = coords.x;
-  newMarkerLng.value = coords.y;
 }
 
 function updateNewMarkerIcon() {
@@ -127,12 +131,23 @@ function resetNewMarker() {
     newMarkerLat.value = null;
     newMarkerLng.value = null;
   }
+
+  markerEditing.value = !markerEditing.value
 }
 
 </script>
 
 <template>
-  <form @submit.prevent="submitMarker" class="absolute bottom-4 left-4 bg-white rounded-xl p-3 w-64">
+  <button class="absolute bottom-4 left-4 left-4 bg-white rounded-xl p-2"
+    @click="() => { markerEditing = !markerEditing }" v-if="!markerEditing">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+      <path
+        d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
+      <path
+        d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
+    </svg>
+  </button>
+  <form @submit.prevent="submitMarker" class="absolute bottom-4 left-4 bg-white rounded-xl p-3 w-64" v-if="markerEditing">
     <div>
       <input type="text" v-model="newMarkerTitle" placeholder="Titre" @input="updateNewMarkerPopup">
     </div>
@@ -190,10 +205,6 @@ function resetNewMarker() {
   outline: 0;
 }
 
-form {
-  z-index: 999;
-}
-
 form input,
 form select,
 form textarea {
@@ -226,5 +237,9 @@ form button[type="reset"] {
 
 .leaflet-popup p {
   @apply my-0 text-sm;
+}
+
+.absolute {
+  z-index: 999;
 }
 </style>
