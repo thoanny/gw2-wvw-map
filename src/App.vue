@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import { v4 as uuidv4 } from 'uuid';
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import markers from "./markers.json";
@@ -15,6 +16,7 @@ const newMarker = ref({
   lng: null,
 });
 const markerEditing = ref(false);
+const userMarkers = ref([]);
 
 const icons = {
   'keep': L.icon({ iconUrl: '/icons/keep.png', iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -8] }),
@@ -61,10 +63,33 @@ function initMap() {
   initMap.on('click', onMapClick);
 
   map.value = initMap;
+
+  initUserMarkers();
 }
 
 function submitMarker() {
-  alert('TODO!')
+  if (!newMarker.value.lat || !newMarker.value.lng) {
+    alert('Tu dois positionner un marqueur sur la carte !');
+  }
+  console.log(newMarker.value);
+
+  addUserMarker(newMarker.value);
+
+  // Reset marker sans fermer le popup
+  if (newMarker.value.marker) {
+    map.value.removeLayer(newMarker.value.marker);
+
+    newMarker.value = {
+      marker: null,
+      icon: 'keep',
+      title: null,
+      description: null,
+      lat: null,
+      lng: null,
+    }
+  }
+
+
 }
 
 function onMapClick(e) {
@@ -99,9 +124,49 @@ function onMapClick(e) {
 
 }
 
+function initUserMarkers() {
+  const localMarkers = localStorage.getItem('markers');
+  if (localMarkers) {
+    userMarkers.value = JSON.parse(localMarkers);
+
+    userMarkers.value.forEach((m) => {
+      const marker = L.marker(map.value.unproject([m.lat, m.lng], map.value.getMaxZoom()), { icon: icons[m.icon] }).addTo(map.value);
+
+      let title = null, description = null;
+
+      if (m.title) {
+        title = `<h4>${m.title}</h4>`;
+      }
+
+      if (m.description) {
+        description = `<p>${m.description}</p>`;
+      }
+
+      if (title || description) {
+        marker.bindPopup(((title) ? title : '') + ((description) ? description : ''));
+      }
+    });
+  }
+}
+
+function addUserMarker(m) {
+  let newUserMarker = {
+    "id": uuidv4(),
+    "lat": m.lat,
+    "lng": m.lng,
+    "icon": m.icon,
+    "title": m.title,
+    "description": m.description
+  }
+
+  userMarkers.value.push(newUserMarker);
+  localStorage.setItem('markers', JSON.stringify(userMarkers.value));
+  console.log(newUserMarker);
+}
+
 function updateNewMarkerIcon() {
   if (newMarker.value.marker) {
-    newMarker.value.marker.setIcon(icons[newMarkerIcon.value])
+    newMarker.value.marker.setIcon(icons[newMarker.value.icon])
   }
 }
 
